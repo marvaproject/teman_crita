@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'core/data/demo_repository.dart';
 import 'core/models/booking.dart';
@@ -9,8 +10,17 @@ import 'core/models/mood_entry.dart';
 import 'core/models/psychologist.dart';
 import 'core/models/trial_session.dart';
 import 'core/theme/app_colors.dart';
+import 'core/theme/app_theme.dart';
+import 'features/onboarding/onboarding_screen.dart';
+import 'features/auth/login_screen.dart';
+import 'features/dashboard/dashboard_screen.dart';
+import 'features/splash/splash_screen.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -21,6 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final state = AppState();
+  bool _showSplash = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +40,23 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'TemanCrita',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-          scaffoldBackgroundColor: AppColors.background,
-          useMaterial3: true,
-        ),
-        home: ListenableBuilder(
-          listenable: state,
-          builder: (context, _) {
-            if (!state.seenOnboarding) return const OnboardingScreen();
-            if (!state.isLoggedIn) return const AuthScreen();
-            return const AppShell();
-          },
-        ),
+        theme: AppTheme.lightTheme(),
+        home: _showSplash
+            ? SplashScreen(
+                onInitializationComplete: () {
+                  setState(() {
+                    _showSplash = false;
+                  });
+                },
+              )
+            : ListenableBuilder(
+                listenable: state,
+                builder: (context, _) {
+                  if (!state.seenOnboarding) return const OnboardingScreen();
+                  if (!state.isLoggedIn) return const LoginScreen();
+                  return const AppShell();
+                },
+              ),
       ),
     );
   }
@@ -136,88 +151,7 @@ class AppScope extends InheritedWidget {
   bool updateShouldNotify(AppScope oldWidget) => state != oldWidget.state;
 }
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(),
-              Container(
-                width: 112,
-                height: 112,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(32),
-                ),
-                child: const Icon(
-                  Icons.cloud_outlined,
-                  size: 56,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: 28),
-              const Text(
-                'Karena Kamu Gak Sendirian',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'TemanCrita membantu kamu check-in mood, cerita ke AI, dan menemukan psikolog yang cocok.',
-                style: TextStyle(color: AppColors.textSecondary, height: 1.45),
-              ),
-              const Spacer(),
-              PrimaryButton(
-                label: 'Mulai Sekarang',
-                icon: Icons.arrow_forward,
-                onPressed: state.completeOnboarding,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    return ScreenScaffold(
-      title: 'Masuk ke TemanCrita',
-      subtitle: 'Prototype ini siap disambungkan ke Supabase Auth.',
-      children: [
-        const AppTextField(label: 'Email', hint: 'nama@email.com'),
-        const SizedBox(height: 12),
-        const AppTextField(label: 'Password', hint: 'Minimal 8 karakter'),
-        const SizedBox(height: 24),
-        PrimaryButton(label: 'Masuk', icon: Icons.login, onPressed: state.login),
-        const SizedBox(height: 12),
-        OutlinedButton(
-          onPressed: state.login,
-          child: const SizedBox(
-            width: double.infinity,
-            child: Center(child: Text('Daftar akun baru')),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class AppShell extends StatelessWidget {
   const AppShell({super.key});
@@ -225,6 +159,7 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
+
     final pages = [
       const DashboardScreen(),
       const ExploreScreen(),
@@ -241,53 +176,73 @@ class AppShell extends StatelessWidget {
       bottomNavigationBar: ListenableBuilder(
         listenable: state,
         builder: (context, _) {
-          return NavigationBar(
-            selectedIndex: state.tabIndex,
-            onDestinationSelected: state.setTab,
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-              NavigationDestination(icon: Icon(Icons.search_outlined), label: 'Eksplor'),
-              NavigationDestination(icon: Icon(Icons.auto_awesome_outlined), label: 'Curhat AI'),
-              NavigationDestination(icon: Icon(Icons.mood_outlined), label: 'Mood'),
-              NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profil'),
-            ],
+          return Container(
+            height: 80.0,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24.0),
+                topRight: Radius.circular(24.0),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.06),
+                  offset: const Offset(0, -4),
+                  blurRadius: 16.0,
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(context, 0, Icons.home_rounded, Icons.home_rounded, 'Home', state),
+                _buildNavItem(context, 1, Icons.search_rounded, Icons.search_rounded, 'Eksplor', state),
+                _buildNavItem(context, 2, Icons.person_search_rounded, Icons.person_search_rounded, 'Psikolog', state),
+                _buildNavItem(context, 3, Icons.mood_rounded, Icons.mood_rounded, 'Mood', state),
+                _buildNavItem(context, 4, Icons.person_rounded, Icons.person_rounded, 'Profil', state),
+              ],
+            ),
           );
         },
       ),
     );
   }
-}
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    return ScreenScaffold(
-      title: 'Halo, Nadya',
-      subtitle: 'Mulai dari yang paling ringan hari ini.',
-      children: [
-        MoodCheckCard(selectedLevel: state.todayMood?.level, onSelected: state.saveMood),
-        const SizedBox(height: 16),
-        InfoCard(
-          icon: Icons.calendar_today_outlined,
-          title: 'Sesi mendatang',
-          body: state.booking?.bookingStatus == BookingStatus.confirmed
-              ? 'Sesi aktif pada ${state.booking!.slotLabel}.'
-              : 'Belum ada sesi. AI matching bisa bantu cari psikolog cocok.',
-          actionLabel: 'Mulai Cerita',
-          onAction: () => state.setTab(2),
+  Widget _buildNavItem(
+    BuildContext context,
+    int index,
+    IconData activeIcon,
+    IconData inactiveIcon,
+    String label,
+    AppState state,
+  ) {
+    final bool isSelected = state.tabIndex == index;
+    return InkWell(
+      onTap: () => state.setTab(index),
+      borderRadius: BorderRadius.circular(16.0),
+      child: SizedBox(
+        width: 68.0,
+        height: 64.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              isSelected ? activeIcon : inactiveIcon,
+              size: 24.0,
+              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11.0,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? AppColors.primary : AppColors.textSecondary,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 16),
-        InfoCard(
-          icon: Icons.spa_outlined,
-          title: 'Reset 3 menit',
-          body: 'Tarik napas pelan, tulis satu kalimat, lalu pilih afirmasi.',
-          actionLabel: 'Check-in Mood',
-          onAction: () => state.setTab(3),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -374,7 +329,7 @@ class _MatchingScreenState extends State<MatchingScreen> {
         const SizedBox(height: 18),
         PrimaryButton(
           label: 'Temukan Psikolog Untukku',
-          icon: Icons.auto_awesome,
+          icon: Icons.auto_awesome_rounded,
           onPressed: () {
             final request = MatchingRequest(
               story: controller.text,
@@ -462,7 +417,7 @@ class PsychologistDetailScreen extends StatelessWidget {
         const SizedBox(height: 16),
         PrimaryButton(
           label: 'Coba Chat 10 Menit',
-          icon: Icons.chat_bubble_outline,
+          icon: Icons.chat_bubble_rounded,
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const TrialChatScreen()),
@@ -563,7 +518,7 @@ class _TrialChatScreenState extends State<TrialChatScreen> {
           decoration: AppColors.cardDeco(color: AppColors.primaryLight),
           child: Row(
             children: [
-              const Icon(Icons.timer_outlined, color: AppColors.primary),
+              const Icon(Icons.timer_rounded, color: AppColors.primary),
               const SizedBox(width: 10),
               Text(session.clock, style: Theme.of(context).textTheme.titleLarge),
             ],
@@ -650,7 +605,7 @@ class BookingScreen extends StatelessWidget {
             const SizedBox(height: 18),
             PrimaryButton(
               label: 'Bayar Sekarang',
-              icon: Icons.payments_outlined,
+              icon: Icons.payments_rounded,
               onPressed: booking?.paymentMethod == null
                   ? null
                   : () {
@@ -685,7 +640,7 @@ class PaymentSuccessScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.check_circle, color: AppColors.success, size: 42),
+              const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 42),
               const SizedBox(height: 12),
               Text('Status: ${state.booking?.bookingStatus.name ?? 'confirmed'}'),
               Text('Transaksi: ${state.booking?.transactionId ?? '-'}'),
@@ -695,7 +650,7 @@ class PaymentSuccessScreen extends StatelessWidget {
         const SizedBox(height: 18),
         PrimaryButton(
           label: 'Kembali ke Home',
-          icon: Icons.home_outlined,
+          icon: Icons.home_rounded,
           onPressed: () {
             state.setTab(0);
             Navigator.of(context).popUntil((route) => route.isFirst);

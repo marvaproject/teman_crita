@@ -24,18 +24,18 @@ void main() {
 
   group('MatchingRequest', () {
     test('requires a non-empty story and allows at most three tags', () {
-      final request = MatchingRequest(
+      const request = MatchingRequest(
         story: 'Aku lagi sering cemas di tempat kerja.',
-        issueTags: const ['cemas', 'kerja', 'tidur'],
+        issueTags: ['cemas', 'kerja', 'tidur'],
       );
 
       expect(request.isValid, isTrue);
     });
 
     test('marks more than three tags as invalid', () {
-      final request = MatchingRequest(
+      const request = MatchingRequest(
         story: 'Aku butuh bantuan.',
-        issueTags: const ['cemas', 'kerja', 'tidur', 'relasi'],
+        issueTags: ['cemas', 'kerja', 'tidur', 'relasi'],
       );
 
       expect(request.isValid, isFalse);
@@ -74,9 +74,9 @@ void main() {
 
   group('TrialSession', () {
     test('reports warning below two minutes and expired at zero seconds', () {
-      expect(TrialSession(remainingSeconds: 600).state, TrialState.active);
-      expect(TrialSession(remainingSeconds: 119).state, TrialState.warning);
-      expect(TrialSession(remainingSeconds: 0).state, TrialState.expired);
+      expect(const TrialSession(remainingSeconds: 600).state, TrialState.active);
+      expect(const TrialSession(remainingSeconds: 119).state, TrialState.warning);
+      expect(const TrialSession(remainingSeconds: 0).state, TrialState.expired);
     });
   });
 }
