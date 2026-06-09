@@ -7,39 +7,42 @@ class DemoRepository {
   List<Psychologist> get psychologists => const [
         Psychologist(
           id: 'psy-1',
-          name: 'Dr. Maya Prameswari',
-          specialty: 'Kecemasan, stres kerja',
+          name: 'Psik. Amanda Putri, M.Psi',
+          specialty: 'Cemas, overthinking, hubungan',
           languages: ['Indonesia', 'English'],
           rating: 4.9,
-          price: 150000,
-          matchReason: 'Cocok untuk cerita tentang cemas dan tekanan kerja.',
-          availableSlot: 'Hari ini, 19.00',
+          price: 350000,
+          matchReason:
+              'Cocok untuk cerita tentang cemas, overthinking, dan kepercayaan diri.',
+          availableSlot: 'Hari ini, 10:00',
           bio:
-              'Psikolog klinis dewasa dengan pendekatan CBT yang hangat dan praktis.',
+              'Psikolog klinis dengan pendekatan CBT yang hangat, praktis, dan berbasis solusi untuk membantu klien merasa lebih tenang.',
         ),
         Psychologist(
           id: 'psy-2',
-          name: 'Raka Adinata, M.Psi',
-          specialty: 'Relasi, keluarga muda',
+          name: 'Psik. Reza Pratama, M.Psi',
+          specialty: 'Stres, trauma, pekerjaan',
           languages: ['Indonesia'],
           rating: 4.8,
-          price: 175000,
-          matchReason: 'Kuat untuk pola komunikasi dan konflik relasi.',
-          availableSlot: 'Besok, 10.00',
+          price: 300000,
+          matchReason:
+              'Kuat untuk membantu mengelola stres, tekanan kerja, dan emosi intens.',
+          availableSlot: 'Hari ini, 13:00',
           bio:
-              'Berpengalaman membantu klien memahami pola relasi dan batas sehat.',
+              'Membantu klien mengelola stres dan tekanan hidup melalui pendekatan CBT dan mindfulness yang terstruktur.',
         ),
         Psychologist(
           id: 'psy-3',
-          name: 'Nadia Salsabila, M.Psi',
-          specialty: 'Burnout, tidur, self-esteem',
+          name: 'Psik. Nadhira Aulia, M.Psi',
+          specialty: 'Self love, kecemasan sosial, trauma',
           languages: ['Indonesia'],
-          rating: 4.7,
-          price: 125000,
-          matchReason: 'Pas untuk keluhan lelah mental dan tidur terganggu.',
-          availableSlot: 'Jumat, 16.30',
+          rating: 4.9,
+          price: 325000,
+          matchReason:
+              'Pas untuk cerita tentang self love, kecemasan sosial, dan pemulihan trauma ringan.',
+          availableSlot: 'Hari ini, 09:00',
           bio:
-              'Fokus pada regulasi emosi, rutinitas pemulihan, dan journaling.',
+              'Pendekatan hangat dan empatik untuk membantu klien menemukan kekuatan dan makna dalam diri.',
         ),
       ];
 

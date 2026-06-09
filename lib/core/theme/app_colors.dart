@@ -36,12 +36,25 @@ class AppColors {
 
   static const Color white = Color(0xFFFFFFFF);
 
-  // Preserve existing helper cardDeco
-  static BoxDecoration cardDeco({Color color = card}) {
+  static BoxDecoration cardDeco({
+    Color color = card,
+    double radius = 16,
+    bool elevated = false,
+    double borderOpacity = 1,
+  }) {
     return BoxDecoration(
       color: color,
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: border),
+      borderRadius: BorderRadius.circular(radius),
+      border: Border.all(color: border.withOpacity(borderOpacity)),
+      boxShadow: elevated
+          ? [
+              BoxShadow(
+                color: primary.withOpacity(0.045),
+                offset: const Offset(0, 6),
+                blurRadius: 22,
+              ),
+            ]
+          : null,
     );
   }
 

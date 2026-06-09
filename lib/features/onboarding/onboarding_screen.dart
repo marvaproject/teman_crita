@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/auth_controls.dart';
 import '../../main.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -23,7 +24,7 @@ class OnboardingScreen extends StatelessWidget {
           width: 82.0 * scale,
           height: 82.0 * scale,
           decoration: BoxDecoration(
-            color: const Color(0xFFEEF2FF).withOpacity(0.62),
+            color: AppColors.primarySurface.withOpacity(0.62),
             borderRadius: BorderRadius.circular(22.0 * scale),
           ),
           child: Center(
@@ -93,7 +94,7 @@ class OnboardingScreen extends StatelessWidget {
                 colors: [
                   AppColors.white,
                   AppColors.white,
-                  Color(0xFFEEF2FF), // Matches the lavender background token
+                  AppColors.primarySurface,
                 ],
                 stops: [
                   0.0,
@@ -258,7 +259,7 @@ class OnboardingScreen extends StatelessWidget {
                           child: const Divider(
                             height: 1.0,
                             thickness: 1.0,
-                            color: Color(0xFFEEF2FF),
+                            color: AppColors.primarySurface,
                           ),
                         ),
                         _buildFeatureItem(
@@ -274,7 +275,7 @@ class OnboardingScreen extends StatelessWidget {
                           child: const Divider(
                             height: 1.0,
                             thickness: 1.0,
-                            color: Color(0xFFEEF2FF),
+                            color: AppColors.primarySurface,
                           ),
                         ),
                         _buildFeatureItem(
@@ -293,50 +294,11 @@ class OnboardingScreen extends StatelessWidget {
                   // Primary CTA Button: "Mulai Sekarang"
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 72.0 * scale),
-                    child: SizedBox(
-                      height: 82.0 * scale,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: state.completeOnboarding,
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0.0,
-                          padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(26.0 * scale),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                        ),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [AppColors.primary, AppColors.primaryDark],
-                            ),
-                            borderRadius: BorderRadius.circular(26.0 * scale),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withOpacity(0.26),
-                                offset: Offset(0.0, 12.0 * scale),
-                                blurRadius: 24.0 * scale,
-                                spreadRadius: -8.0 * scale,
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Mulai Sekarang',
-                              style: TextStyle(
-                                fontSize: clampText(28.0, 14.0, 18.0),
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.white,
-                                height: 1.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    child: AuthPrimaryButton(
+                      label: 'Mulai Sekarang',
+                      onPressed: state.completeOnboarding,
+                      scale: scale,
+                      clampText: clampText,
                     ),
                   ),
                   SizedBox(height: 26.0 * scale),
@@ -344,32 +306,11 @@ class OnboardingScreen extends StatelessWidget {
                   // Secondary Button: "Masuk"
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 72.0 * scale),
-                    child: SizedBox(
-                      height: 82.0 * scale,
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: state.completeOnboarding,
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: AppColors.white.withOpacity(0.82),
-                          side: const BorderSide(
-                            color: Color(0xFFEEF2FF),
-                            width: 1.5,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(26.0 * scale),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 24.0 * scale),
-                        ),
-                        child: Text(
-                          'Masuk',
-                          style: TextStyle(
-                            fontSize: clampText(28.0, 14.0, 18.0),
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primary,
-                            height: 1.0,
-                          ),
-                        ),
-                      ),
+                    child: AuthOutlineButton(
+                      label: 'Masuk',
+                      onPressed: state.completeOnboarding,
+                      scale: scale,
+                      clampText: clampText,
                     ),
                   ),
                 ],

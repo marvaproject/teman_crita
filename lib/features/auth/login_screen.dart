@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/auth_controls.dart';
 import '../../main.dart';
 import 'register_screen.dart';
 
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   AppColors.white,
-                  Color(0xFFEEF2FF),
+                  AppColors.primarySurface,
                 ],
               ),
             ),
@@ -182,164 +183,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Email Label
-                      Text(
-                        'Email',
-                        style: TextStyle(
-                          fontSize: clampText(22.0, 12.0, 15.0),
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
-                          height: 1.0,
-                        ),
-                      ),
-                      SizedBox(height: 16.0 * scale),
-
-                      // Email Field
-                      SizedBox(
-                        height: 86.0 * scale,
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(
-                            fontSize: clampText(23.0, 12.0, 15.0),
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
-                          ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: AppColors.white.withOpacity(0.84),
-                            hintText: 'Masukkan email kamu',
-                            hintStyle: TextStyle(
-                              fontSize: clampText(23.0, 12.0, 15.0),
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textMuted,
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(
-                                left: 24.0 * scale,
-                                right: 18.0 * scale,
-                              ),
-                              child: Icon(
-                                Icons.mail_outline_rounded,
-                                size: 30.0 * scale,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                            prefixIconConstraints: BoxConstraints(
-                              minWidth: 78.0 * scale,
-                              minHeight: 30.0 * scale,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 26.0 * scale,
-                              vertical: 26.0 * scale,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18.0 * scale),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFEEF2FF),
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18.0 * scale),
-                              borderSide: const BorderSide(
-                                color: AppColors.primary,
-                                width: 1.8,
-                              ),
-                            ),
-                          ),
-                        ),
+                      AuthTextField(
+                        label: 'Email',
+                        hint: 'Masukkan email kamu',
+                        icon: Icons.mail_outline_rounded,
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        scale: scale,
+                        clampText: clampText,
                       ),
                       SizedBox(height: 34.0 * scale),
 
-                      // Password Label
-                      Text(
-                        'Password',
-                        style: TextStyle(
-                          fontSize: clampText(22.0, 12.0, 15.0),
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
-                          height: 1.0,
-                        ),
-                      ),
-                      SizedBox(height: 16.0 * scale),
-
-                      // Password Field
-                      SizedBox(
-                        height: 86.0 * scale,
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: !_passwordVisible,
-                          style: TextStyle(
-                            fontSize: clampText(23.0, 12.0, 15.0),
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
-                          ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: AppColors.white.withOpacity(0.84),
-                            hintText: 'Masukkan password kamu',
-                            hintStyle: TextStyle(
-                              fontSize: clampText(23.0, 12.0, 15.0),
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textMuted,
+                      AuthTextField(
+                        label: 'Password',
+                        hint: 'Masukkan password kamu',
+                        icon: Icons.lock_outline_rounded,
+                        controller: _passwordController,
+                        obscureText: !_passwordVisible,
+                        scale: scale,
+                        clampText: clampText,
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.only(right: 24.0 * scale),
+                          child: IconButton(
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              size: 34.0 * scale,
+                              color: AppColors.textSecondary,
                             ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(
-                                left: 24.0 * scale,
-                                right: 18.0 * scale,
-                              ),
-                              child: Icon(
-                                Icons.lock_outline_rounded,
-                                size: 30.0 * scale,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                            suffixIcon: Padding(
-                              padding: EdgeInsets.only(right: 24.0 * scale),
-                              child: IconButton(
-                                icon: Icon(
-                                  _passwordVisible
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                  size: 34.0 * scale,
-                                  color: AppColors.textSecondary,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                            prefixIconConstraints: BoxConstraints(
-                              minWidth: 78.0 * scale,
-                              minHeight: 30.0 * scale,
-                            ),
-                            suffixIconConstraints: BoxConstraints(
-                              minWidth: 64.0 * scale,
-                              minHeight: 34.0 * scale,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 26.0 * scale,
-                              vertical: 26.0 * scale,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18.0 * scale),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFEEF2FF),
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18.0 * scale),
-                              borderSide: const BorderSide(
-                                color: AppColors.primary,
-                                width: 1.8,
-                              ),
-                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -349,11 +226,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: InkWell(
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Lupa Password diakses')),
-                            );
-                          },
                           child: Text(
                             'Lupa Password?',
                             style: TextStyle(
@@ -367,54 +239,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 42.0 * scale),
 
-                      // Primary Button ("Masuk")
-                      SizedBox(
-                        height: 86.0 * scale,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: state.login,
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0.0,
-                            padding: EdgeInsets.zero,
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22.0 * scale),
-                            ),
-                          ),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  AppColors.primary,
-                                  AppColors.primaryDark,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(22.0 * scale),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.24),
-                                  offset: Offset(0.0, 12.0 * scale),
-                                  blurRadius: 24.0 * scale,
-                                  spreadRadius: -8.0 * scale,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Masuk',
-                                style: TextStyle(
-                                  fontSize: clampText(28.0, 14.0, 18.0),
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.white,
-                                  height: 1.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                      AuthPrimaryButton(
+                        label: 'Masuk',
+                        onPressed: state.login,
+                        scale: scale,
+                        clampText: clampText,
                       ),
                       SizedBox(height: 56.0 * scale),
 
@@ -427,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Divider(
                               height: 1.0,
                               thickness: 1.2,
-                              color: Color(0xFFEEF2FF),
+                              color: AppColors.primarySurface,
                             ),
                           ),
                           SizedBox(width: 28.0 * scale),
@@ -445,51 +274,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Divider(
                               height: 1.0,
                               thickness: 1.2,
-                              color: Color(0xFFEEF2FF),
+                              color: AppColors.primarySurface,
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 42.0 * scale),
 
-                      // Google Button
-                      SizedBox(
-                        height: 84.0 * scale,
-                        width: double.infinity,
-                        child: OutlinedButton(
-                          onPressed: state.login,
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: AppColors.white.withOpacity(0.86),
-                            side: const BorderSide(
-                              color: Color(0xFFEEF2FF),
-                              width: 1.5,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0 * scale),
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 24.0 * scale),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Bootstrap.google,
-                                size: 30.0 * scale,
-                                color: AppColors.primary,
-                              ),
-                              SizedBox(width: 22.0 * scale),
-                              Text(
-                                'Masuk dengan Google',
-                                style: TextStyle(
-                                  fontSize: clampText(24.0, 12.0, 15.0),
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.textPrimary,
-                                  height: 1.0,
-                                ),
-                              ),
-                            ],
-                          ),
+                      AuthOutlineButton(
+                        label: 'Masuk dengan Google',
+                        onPressed: state.login,
+                        scale: scale,
+                        clampText: clampText,
+                        icon: Icon(
+                          Bootstrap.google,
+                          size: 30.0 * scale,
+                          color: AppColors.primary,
                         ),
                       ),
                       SizedBox(height: 54.0 * scale),

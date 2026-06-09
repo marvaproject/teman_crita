@@ -15,6 +15,10 @@ import 'features/onboarding/onboarding_screen.dart';
 import 'features/auth/login_screen.dart';
 import 'features/dashboard/dashboard_screen.dart';
 import 'features/splash/splash_screen.dart';
+import 'features/ai_matching/ai_matching_screen.dart';
+import 'features/marketplace/marketplace_screen.dart';
+import 'features/mood/mood_screen.dart';
+import 'features/profile/profile_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -93,8 +97,8 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveMood(int level) {
-    todayMood = MoodEntry.create(level: level);
+  void saveMood(int level, {String? note, String? moodName, String? iconAsset}) {
+    todayMood = MoodEntry.create(level: level, note: note, moodName: moodName, iconAsset: iconAsset);
     notifyListeners();
   }
 
@@ -177,18 +181,18 @@ class AppShell extends StatelessWidget {
         listenable: state,
         builder: (context, _) {
           return Container(
-            height: 80.0,
+            height: 92.0,
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(24.0),
-                topRight: Radius.circular(24.0),
+                topLeft: Radius.circular(18.0),
+                topRight: Radius.circular(18.0),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.06),
+                  color: AppColors.primary.withOpacity(0.08),
                   offset: const Offset(0, -4),
-                  blurRadius: 16.0,
+                  blurRadius: 20.0,
                 ),
               ],
             ),
@@ -243,201 +247,6 @@ class AppShell extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class MoodScreen extends StatelessWidget {
-  const MoodScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    return ScreenScaffold(
-      title: 'Mood Hari Ini',
-      subtitle: 'Pilih kondisi yang paling dekat dengan perasaanmu.',
-      children: [
-        MoodCheckCard(selectedLevel: state.todayMood?.level, onSelected: state.saveMood),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: AppColors.cardDeco(color: AppColors.primaryLight),
-          child: Text(
-            state.todayMood == null
-                ? 'Belum ada cerita hari ini. Mulai dari yang paling ringan.'
-                : 'Tercatat: ${state.todayMood!.label}. Terima kasih sudah mampir ke diri sendiri.',
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class MatchingScreen extends StatefulWidget {
-  const MatchingScreen({super.key});
-
-  @override
-  State<MatchingScreen> createState() => _MatchingScreenState();
-}
-
-class _MatchingScreenState extends State<MatchingScreen> {
-  final controller = TextEditingController();
-  final selectedTags = <String>{};
-  bool submitted = false;
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    final tags = ['cemas', 'kerja', 'tidur', 'relasi', 'keluarga'];
-    return ScreenScaffold(
-      title: 'Curhat AI',
-      subtitle: 'Ceritakan singkat. Kami bantu pilih psikolog yang cocok.',
-      children: [
-        AppTextField(
-          label: 'Cerita kamu',
-          hint: 'Aku akhir-akhir ini...',
-          controller: controller,
-          minLines: 5,
-        ),
-        const SizedBox(height: 14),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: tags.map((tag) {
-            final selected = selectedTags.contains(tag);
-            return FilterChip(
-              selected: selected,
-              label: Text(tag),
-              onSelected: (_) {
-                setState(() {
-                  if (selected) {
-                    selectedTags.remove(tag);
-                  } else if (selectedTags.length < 3) {
-                    selectedTags.add(tag);
-                  }
-                });
-              },
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 18),
-        PrimaryButton(
-          label: 'Temukan Psikolog Untukku',
-          icon: Icons.auto_awesome_rounded,
-          onPressed: () {
-            final request = MatchingRequest(
-              story: controller.text,
-              issueTags: selectedTags.toList(),
-            );
-            if (!request.isValid) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Isi cerita dan pilih maksimal 3 kategori.')),
-              );
-              return;
-            }
-            state.runMatching(request);
-            setState(() => submitted = true);
-          },
-        ),
-        if (submitted) ...[
-          const SizedBox(height: 20),
-          ...state.matches.map((psychologist) {
-            return PsychologistCard(
-              psychologist: psychologist,
-              onTap: () {
-                state.selectPsychologist(psychologist);
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PsychologistDetailScreen()),
-                );
-              },
-            );
-          }),
-        ],
-      ],
-    );
-  }
-}
-
-class ExploreScreen extends StatelessWidget {
-  const ExploreScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    return ScreenScaffold(
-      title: 'Eksplor Psikolog',
-      subtitle: 'Pilih berdasarkan spesialisasi, bahasa, dan slot.',
-      children: state.repository.psychologists.map((psychologist) {
-        return PsychologistCard(
-          psychologist: psychologist,
-          onTap: () {
-            state.selectPsychologist(psychologist);
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PsychologistDetailScreen()),
-            );
-          },
-        );
-      }).toList(),
-    );
-  }
-}
-
-class PsychologistDetailScreen extends StatelessWidget {
-  const PsychologistDetailScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    final psychologist = state.selectedPsychologist ?? state.repository.psychologists.first;
-    return ScreenScaffold(
-      title: psychologist.name,
-      subtitle: psychologist.specialty,
-      showBack: true,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: AppColors.cardDeco(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(psychologist.bio),
-              const SizedBox(height: 16),
-              Text('Rating ${psychologist.rating} | ${psychologist.languages.join(', ')}'),
-              const SizedBox(height: 8),
-              Text('Mulai Rp ${psychologist.price} | ${psychologist.availableSlot}'),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        PrimaryButton(
-          label: 'Coba Chat 10 Menit',
-          icon: Icons.chat_bubble_rounded,
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const TrialChatScreen()),
-            );
-          },
-        ),
-        const SizedBox(height: 10),
-        OutlinedButton(
-          onPressed: () {
-            state.startBooking(bundle: false);
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const BookingScreen()),
-            );
-          },
-          child: const SizedBox(
-            width: double.infinity,
-            child: Center(child: Text('Booking Sesi Penuh')),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -655,43 +464,6 @@ class PaymentSuccessScreen extends StatelessWidget {
             state.setTab(0);
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
-        ),
-      ],
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = AppScope.of(context);
-    return ScreenScaffold(
-      title: 'Profil Saya',
-      subtitle: 'Ringkasan akun dan preferensi.',
-      children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: AppColors.cardDeco(),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Nadya Putri', style: TextStyle(fontWeight: FontWeight.w700)),
-              SizedBox(height: 6),
-              Text('nadya@example.com'),
-              SizedBox(height: 14),
-              Text('Notifikasi mood, sesi, dan pembayaran aktif.'),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-        OutlinedButton(
-          onPressed: state.logout,
-          child: const SizedBox(
-            width: double.infinity,
-            child: Center(child: Text('Keluar')),
-          ),
         ),
       ],
     );

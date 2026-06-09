@@ -10,7 +10,7 @@ Dokumen ini mendefinisikan peta jalan (roadmap) pengembangan aplikasi **TemanCri
 graph TD
     F1[Fase 1: Slicing UI & Asset Setup] --> F2[Fase 2: Arsitektur & Integrasi Logika MVP]
     F2 --> F3[Fase 3: Verifikasi & Automated Testing]
-    
+
     style F1 fill:#f9f,stroke:#333,stroke-width:2px
     style F2 fill:#bbf,stroke:#333,stroke-width:2px
     style F3 fill:#bfb,stroke:#333,stroke-width:2px
@@ -65,7 +65,7 @@ Fase ini berfokus pada visual, tata letak, mikro-animasi, dan aset gambar/vektor
   * Tiga baris fitur terperinci (Pahami diri, Dukungan selalu ada, Terhubung dengan psikolog) lengkap dengan ikon MingCute/Iconsax & pemisah garis tipis.
   * Tombol utama gradien *"Mulai Sekarang"* & tombol sekunder *"Masuk"*.
   * Indikator halaman (3 titik navigasi).
-- [ ] **Login Screen** (`login.jsonc`):
+- [x] **Login Screen** (`login.jsonc`):
   * Mascot brand header awan di bagian atas (650x520).
   * Form input Email & Password dengan ikon dalam box input, bayangan tipis, dan *focused border* warna Indigo.
   * Tombol *"Lupa Password?"* rata kanan.
@@ -73,7 +73,7 @@ Fase ini berfokus pada visual, tata letak, mikro-animasi, dan aset gambar/vektor
   * Pembatas horizontal *"atau masuk dengan"* diapit garis halus.
   * Tombol *"Masuk dengan Google"* (ikon Google + teks) di bagian bawah.
   * Link navigasi bawah: *"Belum punya akun? Daftar di sini"*.
-- [ ] **Register Screen** (`register.jsonc`):
+- [x] **Register Screen** (`register.jsonc`):
   * Mascot awan bersinar (430x288) di atas judul *"Buat Akunmu"*.
   * Input Email & Password dengan pesan instruksi minimal 8 karakter.
   * Baris persetujuan (*consent check*) berupa kotak persetujuan & teks RichText dengan tautan *"Syarat & Ketentuan"* dan *"Kebijakan Privasi"* berwarna biru/indigo.
@@ -81,17 +81,17 @@ Fase ini berfokus pada visual, tata letak, mikro-animasi, dan aset gambar/vektor
   * Opsi masuk dengan Google & tautan *"Sudah punya akun? Masuk di sini"*.
 
 #### 3. Slicing Halaman Dashboard & Fitur Inti
-- [ ] **Dashboard Screen (Home Tab):**
+- [x] **Dashboard Screen (Home Tab):**
   * Header personal dengan foto profil user/inisial nama & tombol notifikasi.
   * Bento Row: Reflection card (desain kartu rapi dengan kutipan motivatif) dan Upcoming Session card (dengan penanda tanggal aktif).
   * Mood Graph Card: Bar chart 7 hari yang interaktif untuk memetakan emosi mingguan.
   * Quick Actions Row: Kumpulan aksi cepat (tarik napas, jurnal, cerita AI, tidur) yang dapat di-scroll horizontal.
   * Streak Card: Banner informasi streak 7 hari dengan latar belakang teal primer.
-- [ ] **AI Matching Screen (Curhat AI Tab):**
+- [x] **AI Matching Screen (Curhat AI Tab):**
   * Tampilan Input Curhatan: Kolom teks besar (minimal 5 baris) & pilihan kategori tag emosi (cemas, kerja, tidur, dll. dengan batas maksimal 3 pilihan).
   * Halaman Animasi Pencarian (Scanning): Transisi memukau saat AI menganalisis cerita selama 3 detik sebelum menampilkan hasil.
   * Halaman Hasil Matching: Kartu rekomendasi 3 psikolog dengan bio, spesialisasi, rating, bahasa, harga, dan alasan personal kecocokan dari AI.
-- [ ] **Marketplace & Detail Psikolog (Eksplor Tab):**
+- [x] **Marketplace & Detail Psikolog (Eksplor Tab):**
   * Halaman daftar psikolog dengan bar pencarian dan opsi filter kategori masalah.
   * Profil detail psikolog: foto profesional, deskripsi bio klinis, rating bintang, ketersediaan jadwal slot, serta opsi aksi *"Coba Chat 10 Menit"* atau *"Booking Sesi Penuh"*.
 - [ ] **Trial Chat Room:**
