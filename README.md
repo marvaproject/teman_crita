@@ -1,16 +1,14 @@
-# teman_crita
+# Teman Crita
 
-A new Flutter project.
+Aplikasi kesehatan mental berbasis Flutter.
 
-## Getting Started
+## Download APK Debug
 
-This project is a starting point for a Flutter application.
+[Download TemanCrita-debug-v1.0.0.apk](https://github.com/marvaproject/teman_crita/releases/download/v1.0.0-debug/TemanCrita-debug-v1.0.0.apk)
 
-A few resources to get you started if this is your first Flutter project:
+## Build dari Source
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+flutter build apk --debug
+```
